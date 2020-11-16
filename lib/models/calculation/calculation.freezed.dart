@@ -15,12 +15,12 @@ class _$CalculationTearOff {
 
 // ignore: unused_element
   _Calculation call(
-      {OperationType operationType,
+      {OperatorType operatorType,
       double value1,
       double value2,
       double result}) {
     return _Calculation(
-      operationType: operationType,
+      operatorType: operatorType,
       value1: value1,
       value2: value2,
       result: result,
@@ -34,7 +34,7 @@ const $Calculation = _$CalculationTearOff();
 
 /// @nodoc
 mixin _$Calculation {
-  OperationType get operationType;
+  OperatorType get operatorType;
   double get value1;
   double get value2;
   double get result;
@@ -48,10 +48,7 @@ abstract class $CalculationCopyWith<$Res> {
           Calculation value, $Res Function(Calculation) then) =
       _$CalculationCopyWithImpl<$Res>;
   $Res call(
-      {OperationType operationType,
-      double value1,
-      double value2,
-      double result});
+      {OperatorType operatorType, double value1, double value2, double result});
 }
 
 /// @nodoc
@@ -64,15 +61,15 @@ class _$CalculationCopyWithImpl<$Res> implements $CalculationCopyWith<$Res> {
 
   @override
   $Res call({
-    Object operationType = freezed,
+    Object operatorType = freezed,
     Object value1 = freezed,
     Object value2 = freezed,
     Object result = freezed,
   }) {
     return _then(_value.copyWith(
-      operationType: operationType == freezed
-          ? _value.operationType
-          : operationType as OperationType,
+      operatorType: operatorType == freezed
+          ? _value.operatorType
+          : operatorType as OperatorType,
       value1: value1 == freezed ? _value.value1 : value1 as double,
       value2: value2 == freezed ? _value.value2 : value2 as double,
       result: result == freezed ? _value.result : result as double,
@@ -88,10 +85,7 @@ abstract class _$CalculationCopyWith<$Res>
       __$CalculationCopyWithImpl<$Res>;
   @override
   $Res call(
-      {OperationType operationType,
-      double value1,
-      double value2,
-      double result});
+      {OperatorType operatorType, double value1, double value2, double result});
 }
 
 /// @nodoc
@@ -106,15 +100,15 @@ class __$CalculationCopyWithImpl<$Res> extends _$CalculationCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object operationType = freezed,
+    Object operatorType = freezed,
     Object value1 = freezed,
     Object value2 = freezed,
     Object result = freezed,
   }) {
     return _then(_Calculation(
-      operationType: operationType == freezed
-          ? _value.operationType
-          : operationType as OperationType,
+      operatorType: operatorType == freezed
+          ? _value.operatorType
+          : operatorType as OperatorType,
       value1: value1 == freezed ? _value.value1 : value1 as double,
       value2: value2 == freezed ? _value.value2 : value2 as double,
       result: result == freezed ? _value.result : result as double,
@@ -125,10 +119,10 @@ class __$CalculationCopyWithImpl<$Res> extends _$CalculationCopyWithImpl<$Res>
 /// @nodoc
 class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
   const _$_Calculation(
-      {this.operationType, this.value1, this.value2, this.result});
+      {this.operatorType, this.value1, this.value2, this.result});
 
   @override
-  final OperationType operationType;
+  final OperatorType operatorType;
   @override
   final double value1;
   @override
@@ -138,7 +132,7 @@ class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Calculation(operationType: $operationType, value1: $value1, value2: $value2, result: $result)';
+    return 'Calculation(operatorType: $operatorType, value1: $value1, value2: $value2, result: $result)';
   }
 
   @override
@@ -146,7 +140,7 @@ class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Calculation'))
-      ..add(DiagnosticsProperty('operationType', operationType))
+      ..add(DiagnosticsProperty('operatorType', operatorType))
       ..add(DiagnosticsProperty('value1', value1))
       ..add(DiagnosticsProperty('value2', value2))
       ..add(DiagnosticsProperty('result', result));
@@ -156,9 +150,9 @@ class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Calculation &&
-            (identical(other.operationType, operationType) ||
+            (identical(other.operatorType, operatorType) ||
                 const DeepCollectionEquality()
-                    .equals(other.operationType, operationType)) &&
+                    .equals(other.operatorType, operatorType)) &&
             (identical(other.value1, value1) ||
                 const DeepCollectionEquality().equals(other.value1, value1)) &&
             (identical(other.value2, value2) ||
@@ -170,7 +164,7 @@ class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(operationType) ^
+      const DeepCollectionEquality().hash(operatorType) ^
       const DeepCollectionEquality().hash(value1) ^
       const DeepCollectionEquality().hash(value2) ^
       const DeepCollectionEquality().hash(result);
@@ -182,13 +176,13 @@ class _$_Calculation with DiagnosticableTreeMixin implements _Calculation {
 
 abstract class _Calculation implements Calculation {
   const factory _Calculation(
-      {OperationType operationType,
+      {OperatorType operatorType,
       double value1,
       double value2,
       double result}) = _$_Calculation;
 
   @override
-  OperationType get operationType;
+  OperatorType get operatorType;
   @override
   double get value1;
   @override
