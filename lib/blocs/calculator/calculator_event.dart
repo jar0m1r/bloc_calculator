@@ -23,20 +23,20 @@ class ValueInput extends CalculatorEvent {
 }
 
 class OperatorInput extends CalculatorEvent {
-  final OperatorType operatorType;
+  final OperationType operationType;
 
-  OperatorInput(this.operatorType);
+  OperatorInput(this.operationType);
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is OperatorInput && o.operatorType == operatorType;
+    return o is OperatorInput && o.operationType == operationType;
   }
 
   @override
-  int get hashCode => operatorType.hashCode;
+  int get hashCode => operationType.hashCode;
 
   @override
-  String toString() => 'OperatorInput(operatorType: $operatorType)';
+  String toString() => 'OperatorInput(operatorType: $operationType)';
 }

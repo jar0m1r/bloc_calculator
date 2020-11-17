@@ -1,5 +1,4 @@
 import 'package:bloc_calculator/blocs/calculator/calculator_bloc.dart';
-import 'package:bloc_calculator/models/calculation/calculation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,12 +29,13 @@ class CalculationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CalculatorBloc, CalculatorState>(
       builder: (BuildContext context, CalculatorState state) {
-        final Calculation calc = (state as CalculatorReady).calculation;
+        final StringCalculation calc =
+            (state as CalculatorInProgress).calculation;
         final List<String> calcItems = [
           //! fixme
-          calc.value1?.toInt().toString(),
-          if (calc != null) operatorTypeSymbol[calc.operatorType],
-          calc.value2?.toInt()?.toString()
+          calc.value1,
+          if (calc != null) operatorTypeSymbol[calc.operation],
+          calc.value2
         ]..removeWhere((element) => element == null);
 
         return Container(
@@ -45,7 +45,7 @@ class CalculationView extends StatelessWidget {
           ),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: state is CalculatorReady
+              children: state is CalculatorInProgress
                   ? _getCalculationInputItems(calcItems)
                   : [const CircularProgressIndicator()]),
         );

@@ -10,17 +10,19 @@ class CalculatorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<CalculatorBloc>(
       create: (context) => CalculatorBloc(),
-      child: Scaffold(
-        body: SafeArea(
-          child: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(child: DisplayView()),
-                NumpadView(),
-              ],
+      child: Builder(
+        builder: (context) => Scaffold(
+          body: SafeArea(
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(child: DisplayView()),
+                  NumpadView(),
+                ],
+              ),
             ),
           ),
         ),

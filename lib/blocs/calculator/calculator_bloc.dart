@@ -3,16 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import '../../models/calculation/calculation.dart';
-
 part 'calculator_event.dart';
 part 'calculator_state.dart';
 
 class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
   CalculatorBloc()
       : super(
-          CalculatorReady(
-            const Calculation(value1: 0),
+          CalculatorInProgress(
+            const StringCalculation(value1: '0'),
           ),
         );
 
@@ -23,24 +21,29 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
     if (event is ValueInput) {
       yield* _mapValueToState(event.value);
     } else if (event is OperatorInput) {
-      yield* _mapOperatorToState(event.operatorType);
+      yield* _mapOperatorToState(event.operationType);
     }
   }
 
   Stream<CalculatorState> _mapValueToState(int value) async* {
-    if (state is CalculatorReady) {
-      final calculation = (state as CalculatorReady).calculation;
-      if (calculation.operatorType == null) {
-        yield CalculatorReady(calculation.copyWith(
-            value1: calculation.value1 == 0.0
-                ? value.toDouble()
-                : double.tryParse('${calculation.value1}$value')));
-      } else {
-        yield CalculatorReady(
+    if (state is CalculatorInProgress) {
+      final StringCalculation calculation =
+          (state as CalculatorInProgress).calculation;
+
+      if (calculation.operation == null) {
+        yield CalculatorInProgress(
           calculation.copyWith(
-            value2: calculation.value2 == 0.0 || calculation.value2 == null
-                ? value.toDouble()
-                : double.tryParse('${calculation.value2}$value'),
+            value1: calculation.value1 == '0'
+                ? value.toString()
+                : '${calculation.value1}$value',
+          ),
+        );
+      } else {
+        yield CalculatorInProgress(
+          calculation.copyWith(
+            value2: calculation.value2 == null
+                ? value.toString()
+                : '${calculation.value2}$value',
           ),
         );
       }
@@ -48,11 +51,15 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
   }
 
   Stream<CalculatorState> _mapOperatorToState(
-      OperatorType operatorType) async* {
-    if (state is CalculatorReady) {
-      final calculation = (state as CalculatorReady).calculation;
-      if (calculation.operatorType == null) {
-        yield CalculatorReady(calculation.copyWith(operatorType: operatorType));
+      OperationType operationType) async* {
+    if (state is CalculatorInProgress) {
+      final calculation = (state as CalculatorInProgress).calculation;
+      if (calculation.operation == null) {
+        yield CalculatorInProgress(
+            calculation.copyWith(operation: operationType));
+      } else if (calculation.operation != null &&
+          calculation.operation == OperationType.equals) {
+        yield CalculatorFinished(calculation.copyWith(result: 'done')); //!
       }
     }
   }
