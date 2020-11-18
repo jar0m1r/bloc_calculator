@@ -1,4 +1,4 @@
-import 'package:bloc_calculator/blocs/calculator/calculator_bloc.dart';
+import 'package:bloc_calculator/blocs/calculation/calculation_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,64 +8,67 @@ class NumpadItem<T> {
 
   NumpadItem(this.value, this.symbol);
 
-  CalculatorEvent get event {
-    if (value is int) {
-      return ValueInput(value as int);
-    } else if (value is OperationType) {
-      return OperatorInput(value as OperationType);
+  CalculationEvent get event {
+    switch (value.runtimeType) {
+      case ValueInputType:
+        return ValueInput(value as ValueInputType);
+        break;
+      case OperatorInputType:
+        return OperatorInput(value as OperatorInputType);
+        break;
+      case ActionInputType:
+        return ActionInput(value as ActionInputType);
+        break;
+      default:
+        return null;
     }
-    return null;
   }
 }
 
 class NumpadView extends StatelessWidget {
-  final numpadItemMap = <NumpadItem>[
-    NumpadItem<int>(7, '7'),
-    NumpadItem<int>(8, '8'),
-    NumpadItem<int>(9, '9'),
-    NumpadItem<OperationType>(OperationType.add, '+'),
-    NumpadItem<OperationType>(OperationType.subtract, '-'),
-    NumpadItem<int>(4, '4'),
-    NumpadItem<int>(5, '5'),
-    NumpadItem<int>(6, '6'),
-    NumpadItem<OperationType>(OperationType.multiply, 'x'),
-    NumpadItem<OperationType>(OperationType.divide, ':'),
-    NumpadItem<int>(1, '1'),
-    NumpadItem<int>(2, '2'),
-    NumpadItem<int>(3, '3'),
-    NumpadItem<OperationType>(OperationType.none, ''),
-    NumpadItem<OperationType>(OperationType.equals, '='),
-    NumpadItem<OperationType>(OperationType.none, ''),
-    NumpadItem<int>(0, '0'),
-    NumpadItem<OperationType>(OperationType.none, ''),
-    NumpadItem<OperationType>(OperationType.delete, '<'),
-    NumpadItem<OperationType>(OperationType.clear, 'C'),
+  final List<NumpadItem> inputTypeSymbols = [
+    NumpadItem(ValueInputType.seven, '7'),
+    NumpadItem(ValueInputType.eight, '8'),
+    NumpadItem(ValueInputType.nine, '9'),
+    NumpadItem(OperatorInputType.add, '+'),
+    NumpadItem(OperatorInputType.subtract, '-'),
+    NumpadItem(ValueInputType.four, '4'),
+    NumpadItem(ValueInputType.five, '5'),
+    NumpadItem(ValueInputType.six, '6'),
+    NumpadItem(OperatorInputType.multiply, 'x'),
+    NumpadItem(OperatorInputType.divide, ':'),
+    NumpadItem(ValueInputType.one, '1'),
+    NumpadItem(ValueInputType.two, '2'),
+    NumpadItem(ValueInputType.three, '3'),
+    NumpadItem(ActionInputType.none, ''),
+    NumpadItem(OperatorInputType.equals, '='),
+    NumpadItem(ActionInputType.none, ''),
+    NumpadItem(ValueInputType.zero, '0'),
+    NumpadItem(ActionInputType.none, ''),
+    NumpadItem(ActionInputType.undo, '<'),
+    NumpadItem(ActionInputType.clear, 'C'),
   ];
-
-  List<Widget> createNumpadItems(BuildContext context) {
-    final calculatorBloc = BlocProvider.of<CalculatorBloc>(context);
-    return numpadItemMap.map((item) {
-      return OutlineButton(
-        onPressed: () => calculatorBloc.add(item.event),
-        child: Center(
-          child: Text(
-            item.symbol,
-            style: const TextStyle(fontSize: 24),
-          ),
-        ),
-      );
-    }).toList();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final calculatorBloc = BlocProvider.of<CalculationBloc>(context);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: (MediaQuery.of(context).size.width / 5) * 4,
       child: GridView(
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-        children: createNumpadItems(context),
+        children: inputTypeSymbols.map((numpadItem) {
+          return OutlineButton(
+            onPressed: () => calculatorBloc.add(numpadItem.event),
+            child: Center(
+              child: Text(
+                numpadItem.symbol,
+                style: const TextStyle(fontSize: 24),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

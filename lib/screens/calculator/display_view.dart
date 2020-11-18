@@ -1,4 +1,4 @@
-import 'package:bloc_calculator/blocs/calculator/calculator_bloc.dart';
+import 'package:bloc_calculator/blocs/calculation/calculation_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +19,14 @@ class DisplayView extends StatelessWidget {
 }
 
 class CalculationView extends StatelessWidget {
+  final Map<OperatorInputType, String> operatorInputTypeToString = {
+    OperatorInputType.add: '+',
+    OperatorInputType.subtract: '-',
+    OperatorInputType.multiply: '+',
+    OperatorInputType.divide: '/',
+    OperatorInputType.equals: '=',
+  };
+
   List<Widget> _getCalculationInputItems(List<String> items) {
     return items.map((item) {
       return CalculationInputItem(item);
@@ -27,15 +35,14 @@ class CalculationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalculatorBloc, CalculatorState>(
-      builder: (BuildContext context, CalculatorState state) {
-        final StringCalculation calc =
-            (state as CalculatorInProgress).calculation;
+    return BlocBuilder<CalculationBloc, CalculationState>(
+      builder: (BuildContext context, CalculationState state) {
+        final Calculation calc = (state as CalculationFirstOperand).calculation;
         final List<String> calcItems = [
           //! fixme
-          calc.value1,
-          if (calc != null) operatorTypeSymbol[calc.operation],
-          calc.value2
+          calc?.firstOperand?.toString(),
+          if (calc != null) operatorInputTypeToString[calc.operator],
+          calc?.secondOperand.toString(),
         ]..removeWhere((element) => element == null);
 
         return Container(
@@ -45,7 +52,7 @@ class CalculationView extends StatelessWidget {
           ),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: state is CalculatorInProgress
+              children: state is! CalculationBusy
                   ? _getCalculationInputItems(calcItems)
                   : [const CircularProgressIndicator()]),
         );
