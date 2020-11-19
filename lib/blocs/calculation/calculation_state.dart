@@ -70,27 +70,36 @@ class Calculation {
   final int firstOperand;
   final int secondOperand;
   final OperatorInputType operator;
-  final double result;
+  final int result;
+  final int remainder;
 
   const Calculation({
     this.firstOperand = 0,
     this.secondOperand,
     this.operator,
     this.result,
+    this.remainder = 0, // FIXME not here
   });
 
   Calculation copyWith({
     int firstOperand,
     int secondOperand,
     OperatorInputType operator,
-    double result,
+    int result,
+    int remainder,
   }) {
     return Calculation(
       firstOperand: firstOperand ?? this.firstOperand,
       secondOperand: secondOperand ?? this.secondOperand,
       operator: operator ?? this.operator,
       result: result ?? this.result,
+      remainder: remainder ?? this.remainder,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Calculation(firstOperand: $firstOperand, secondOperand: $secondOperand, operator: $operator, result: $result, remainder: $remainder)';
   }
 
   @override
@@ -101,7 +110,8 @@ class Calculation {
         o.firstOperand == firstOperand &&
         o.secondOperand == secondOperand &&
         o.operator == operator &&
-        o.result == result;
+        o.result == result &&
+        o.remainder == remainder;
   }
 
   @override
@@ -109,11 +119,7 @@ class Calculation {
     return firstOperand.hashCode ^
         secondOperand.hashCode ^
         operator.hashCode ^
-        result.hashCode;
-  }
-
-  @override
-  String toString() {
-    return 'Calculation(firstOperand: $firstOperand, secondOperand: $secondOperand, operator: $operator, result: $result)';
+        result.hashCode ^
+        remainder.hashCode;
   }
 }

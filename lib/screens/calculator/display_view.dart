@@ -57,6 +57,7 @@ class CalculationView extends StatelessWidget {
             calc.result
                 .toInt()
                 .toString(), //! fix for divisions with remainder.
+          if (calc?.remainder != 0) ' en ${calc.remainder.toString()} over',
         ]..removeWhere((element) => element == null);
 
         return Container(
@@ -83,6 +84,9 @@ class CalculationInputItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(value, style: TextStyle(fontSize: showBig ? 52 : 32));
+    return Padding(
+      padding: const EdgeInsets.only(right: 2.0),
+      child: Text(value, style: TextStyle(fontSize: showBig ? 52 : 32)),
+    );
   }
 }

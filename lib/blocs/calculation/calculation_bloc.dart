@@ -65,7 +65,7 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
           final calculation = (state as CalculationSecondOperand).calculation;
           final result =
               calculateResult(calculation); //calculation in this class???
-          yield CalculationResult(calculation.copyWith(result: result)); //!
+          yield CalculationResult(result); //!
         }
         break;
       case CalculationResult:
@@ -81,24 +81,38 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
     }
   }
 
-  double calculateResult(Calculation calc) {
+  Calculation calculateResult(Calculation calc) {
+    int result;
+    int remainder = 0;
+
     switch (calc.operator) {
       case OperatorInputType.add:
-        return (calc.firstOperand + calc.secondOperand).toDouble();
+        result = calc.firstOperand + calc.secondOperand;
         break;
       case OperatorInputType.subtract:
-        return (calc.firstOperand - calc.secondOperand).toDouble();
+        result = calc.firstOperand - calc.secondOperand;
         break;
       case OperatorInputType.multiply:
-        return (calc.firstOperand * calc.secondOperand).toDouble();
+        result = calc.firstOperand * calc.secondOperand;
+        break;
       case OperatorInputType.divide:
-        assert(calc.secondOperand != 0);
-        return (calc.firstOperand / calc.secondOperand).toDouble();
+        if (calc.secondOperand == 0) {
+          result = null; //TODO kan niet bericht
+          remainder = 0;
+          break;
+        }
+        result = calc.firstOperand ~/ calc.secondOperand;
+        remainder = calc.firstOperand % calc.secondOperand;
         break;
       default:
-        return 0.0; //!
+        result = 0; //!
         break;
     }
+
+    return calc.copyWith(
+      result: result,
+      remainder: remainder,
+    );
   }
 
   final Map<ValueInputType, int> valueInputTypeToInt = {
