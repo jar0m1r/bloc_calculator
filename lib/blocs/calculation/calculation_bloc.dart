@@ -39,11 +39,13 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
       case CalculationSecondOperand:
         final calculation = (state as CalculationSecondOperand).calculation;
         final newSecondOperand = int.tryParse(
-            '${calculation.secondOperand.toString()}${valueInputTypeToInt[value].toString()}');
+            '${calculation.secondOperand?.toString() ?? ""}${valueInputTypeToInt[value].toString()}');
         yield CalculationSecondOperand(
             calculation.copyWith(secondOperand: newSecondOperand));
         break;
       case CalculationResult:
+        yield CalculationFirstOperand(
+            Calculation(firstOperand: valueInputTypeToInt[value]));
         break;
       default:
         break;
@@ -53,7 +55,7 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
   Stream<CalculationState> _mapOperatorToState(OperatorInputType value) async* {
     switch (state.runtimeType) {
       case CalculationFirstOperand:
-        if (value == OperatorInputType.equals) {
+        if (value != OperatorInputType.equals) {
           final calculation = (state as CalculationFirstOperand).calculation;
           yield CalculationSecondOperand(calculation.copyWith(operator: value));
         }
@@ -61,7 +63,9 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
       case CalculationSecondOperand:
         if (value == OperatorInputType.equals) {
           final calculation = (state as CalculationSecondOperand).calculation;
-          yield CalculationResult(calculation.copyWith(result: 0.0)); //!
+          final result =
+              calculateResult(calculation); //calculation in this class???
+          yield CalculationResult(calculation.copyWith(result: result)); //!
         }
         break;
       case CalculationResult:
@@ -74,6 +78,26 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
   Stream<CalculationState> _mapActionToState(ActionInputType value) async* {
     if (value == ActionInputType.clear) {
       yield const CalculationFirstOperand(Calculation());
+    }
+  }
+
+  double calculateResult(Calculation calc) {
+    switch (calc.operator) {
+      case OperatorInputType.add:
+        return (calc.firstOperand + calc.secondOperand).toDouble();
+        break;
+      case OperatorInputType.subtract:
+        return (calc.firstOperand - calc.secondOperand).toDouble();
+        break;
+      case OperatorInputType.multiply:
+        return (calc.firstOperand * calc.secondOperand).toDouble();
+      case OperatorInputType.divide:
+        assert(calc.secondOperand != 0);
+        return (calc.firstOperand / calc.secondOperand).toDouble();
+        break;
+      default:
+        return 0.0; //!
+        break;
     }
   }
 

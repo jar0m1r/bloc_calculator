@@ -22,7 +22,7 @@ class CalculationView extends StatelessWidget {
   final Map<OperatorInputType, String> operatorInputTypeToString = {
     OperatorInputType.add: '+',
     OperatorInputType.subtract: '-',
-    OperatorInputType.multiply: '+',
+    OperatorInputType.multiply: '*',
     OperatorInputType.divide: '/',
     OperatorInputType.equals: '=',
   };
@@ -37,12 +37,26 @@ class CalculationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CalculationBloc, CalculationState>(
       builder: (BuildContext context, CalculationState state) {
-        final Calculation calc = (state as CalculationFirstOperand).calculation;
+        //! shouldnt need to do this..!! Make calculation state and use Bloc states as View related not logic related
+        Calculation calc;
+        if (state is CalculationFirstOperand) {
+          calc = state.calculation;
+        } else if (state is CalculationSecondOperand) {
+          calc = state.calculation;
+        } else if (state is CalculationResult) {
+          calc = state.calculation;
+        }
+
         final List<String> calcItems = [
           //! fixme
           calc?.firstOperand?.toString(),
-          if (calc != null) operatorInputTypeToString[calc.operator],
-          calc?.secondOperand.toString(),
+          if (calc?.operator != null) operatorInputTypeToString[calc.operator],
+          calc?.secondOperand?.toString(),
+          if (calc?.result != null) '=',
+          if (calc?.result != null)
+            calc.result
+                .toInt()
+                .toString(), //! fix for divisions with remainder.
         ]..removeWhere((element) => element == null);
 
         return Container(

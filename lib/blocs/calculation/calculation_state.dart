@@ -96,20 +96,20 @@ class Calculation {
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-  
+
     return o is Calculation &&
-      o.firstOperand == firstOperand &&
-      o.secondOperand == secondOperand &&
-      o.operator == operator &&
-      o.result == result;
+        o.firstOperand == firstOperand &&
+        o.secondOperand == secondOperand &&
+        o.operator == operator &&
+        o.result == result;
   }
 
   @override
   int get hashCode {
     return firstOperand.hashCode ^
-      secondOperand.hashCode ^
-      operator.hashCode ^
-      result.hashCode;
+        secondOperand.hashCode ^
+        operator.hashCode ^
+        result.hashCode;
   }
 
   @override
