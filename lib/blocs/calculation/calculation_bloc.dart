@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_calculator/blocs/calculation/calculation.dart';
 import 'package:meta/meta.dart';
 
 part 'calculation_event.dart';
@@ -13,6 +14,8 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
             Calculation(),
           ),
         );
+
+  final maxOperandValue = 1000;
 
   @override
   Stream<CalculationState> mapEventToState(
@@ -33,15 +36,20 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
         final calculation = (state as CalculationFirstOperand).calculation;
         final newFirstOperand = int.tryParse(
             '${calculation.firstOperand.toString()}${valueInputTypeToInt[value].toString()}');
-        yield CalculationFirstOperand(
-            calculation.copyWith(firstOperand: newFirstOperand));
+        if (newFirstOperand <= maxOperandValue) {
+          //! FIXME
+          yield CalculationFirstOperand(
+              calculation.copyWith(firstOperand: newFirstOperand));
+        }
         break;
       case CalculationSecondOperand:
         final calculation = (state as CalculationSecondOperand).calculation;
         final newSecondOperand = int.tryParse(
             '${calculation.secondOperand?.toString() ?? ""}${valueInputTypeToInt[value].toString()}');
-        yield CalculationSecondOperand(
-            calculation.copyWith(secondOperand: newSecondOperand));
+        if (newSecondOperand <= maxOperandValue) {
+          yield CalculationSecondOperand(
+              calculation.copyWith(secondOperand: newSecondOperand));
+        }
         break;
       case CalculationResult:
         yield CalculationFirstOperand(
