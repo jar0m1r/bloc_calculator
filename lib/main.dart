@@ -30,12 +30,6 @@ class MyApp extends StatelessWidget {
               background1: color2,
               isDark: true,
             ).themeData,
-            // data: ThemeData(
-            //   brightness: Brightness.light,
-            //   primarySwatch: Colors.blue,
-            //   visualDensity: VisualDensity.adaptivePlatformDensity,
-            //   fontFamily: 'Galindo',
-            // ),
             child: extendedNav,
           ),
         ));

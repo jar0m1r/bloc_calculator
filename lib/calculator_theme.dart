@@ -13,8 +13,9 @@ class CalculatorTheme {
 
   ThemeData get themeData {
     /// Create a TextTheme and ColorScheme, that we can use to generate ThemeData
-    final TextTheme txtTheme =
-        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme;
+    final TextTheme txtTheme = (isDark ? ThemeData.dark() : ThemeData.light())
+        .textTheme
+        .apply(fontFamily: 'Galindo');
     final Color txtColor = txtTheme.bodyText1.color;
     final ColorScheme colorScheme = ColorScheme(
         // Decide how you want to apply your own custom theme, to the MaterialApp
