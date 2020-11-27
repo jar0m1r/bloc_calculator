@@ -42,10 +42,22 @@ class VectorElement {
 }
 
 class VectorGroup {
+  String id;
   Map<String, VectorElement> elementMap;
   Size size;
 
-  VectorGroup({this.elementMap, this.size});
+  VectorGroup({this.id, this.elementMap, this.size});
+
+  factory VectorGroup.fromSVG(
+      String id, Size size, Map<String, List<String>> svgPaths) {
+    final Map<String, VectorElement> elementMap = svgPaths.map((key, value) {
+      return MapEntry(
+          key,
+          VectorElement.fromSVG(
+              name: key, svgPaths: svgPaths[key], color: Colors.red));
+    });
+    return VectorGroup(id: id, size: size, elementMap: elementMap);
+  }
 
   void scale(double scaleFactor) {
     for (final VectorElement element in elementMap.values.toList()) {
