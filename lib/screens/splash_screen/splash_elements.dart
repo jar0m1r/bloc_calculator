@@ -1,4 +1,4 @@
-import 'package:bloc_calculator/utils/vector_element.dart';
+import 'package:bloc_calculator/utils/vector_group.dart';
 import 'package:flutter/material.dart';
 
 //FIXME
@@ -8,7 +8,7 @@ const color3 = Color.fromRGBO(0, 255, 255, 1);
 const color4 = Color.fromRGBO(89, 232, 105, 1);
 const color5 = Color.fromRGBO(255, 56, 160, 1);
 
-final splashElements = VectorElements(
+final splashScreenVectorImage = VectorGroup(
   size: const Size(2500, 1768),
   elementMap: <String, VectorElement>{
     'letter_u': VectorElement.fromSVG(

@@ -71,7 +71,13 @@ class CalculationInputItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 2.0),
-      child: Text(value, style: TextStyle(fontSize: showBig ? 52 : 32)),
+      child: Text(
+        value,
+        style: TextStyle(
+          fontSize: showBig ? 52 : 32,
+          color: Colors.black,
+        ),
+      ),
     );
   }
 }

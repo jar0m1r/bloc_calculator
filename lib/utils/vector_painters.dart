@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bloc_calculator/utils/vector_element.dart';
+import 'package:bloc_calculator/utils/vector_group.dart';
 
 class VectorPainter extends CustomPainter {
   final VectorElement element;
@@ -21,5 +21,6 @@ class VectorPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(VectorPainter oldDelegate) =>
+      oldDelegate.element.color != element.color;
 }
