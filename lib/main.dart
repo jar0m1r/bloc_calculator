@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:bloc_calculator/app/locator.dart';
 import 'package:bloc_calculator/blocs/simple_bloc_observer.dart';
 import 'package:bloc_calculator/calculator_theme.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ const color4 = Color.fromRGBO(89, 232, 105, 1);
 const color5 = Color.fromRGBO(255, 56, 160, 1);
 
 void main() {
+  setupLocator();
   Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }

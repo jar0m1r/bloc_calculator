@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' show Picture, PictureRecorder, Rect, Size, hashValues;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:bloc_calculator/utils/vector_group.dart';
 
 class RenderVector extends RenderBox {
   /// Creates a new [RenderPicture].
@@ -278,9 +279,9 @@ class DrawableRoot {
     if (viewportOffset != Offset.zero) {
       canvas.translate(viewportOffset.dx, viewportOffset.dy);
     }
-    for (Drawable child in children) {
-      child.draw(canvas, viewport);
-    }
+    // for (Drawable child in children) {
+    //   child.draw(canvas, viewport);
+    // }
 
     if (transform != null) {
       canvas.restore();

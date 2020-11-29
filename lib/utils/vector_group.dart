@@ -2,7 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:bloc_calculator/utils/path_extensions.dart';
 import 'package:svg_path_parser/svg_path_parser.dart';
 
-//? should I or should I not make this immutable?
+abstract class Drawable {
+  void draw(Canvas canvas, Rect viewport);
+}
+
+class VectorGroup {
+  String id;
+  Map<String, VectorElement> elementMap;
+  Size size;
+
+  VectorGroup({this.id, this.elementMap, this.size});
+
+  factory VectorGroup.fromSVG(
+      String id, Size size, Map<String, List<String>> svgPaths) {
+    final Map<String, VectorElement> elementMap = svgPaths.map((key, value) {
+      return MapEntry(
+        key,
+        VectorElement.fromSVG(
+            name: key, svgPaths: svgPaths[key], color: Colors.red),
+      );
+    });
+    return VectorGroup(id: id, size: size, elementMap: elementMap);
+  }
+
+  void scale(double scaleFactor) {
+    for (final VectorElement element in elementMap.values.toList()) {
+      element.scale(scaleFactor);
+    }
+    size = size * scaleFactor;
+  }
+}
+
 class VectorElement {
   String name;
   List<Path> paths;
@@ -41,28 +71,23 @@ class VectorElement {
   }
 }
 
-class VectorGroup {
-  String id;
-  Map<String, VectorElement> elementMap;
-  Size size;
+class VectorElementLayer implements Drawable {
+  final String id;
+  final Path path;
+  final Size size;
+  final Offset position;
+  final Color color;
 
-  VectorGroup({this.id, this.elementMap, this.size});
+  VectorElementLayer._({
+    this.id,
+    this.path,
+    this.size,
+    this.position,
+    this.color,
+  });
 
-  factory VectorGroup.fromSVG(
-      String id, Size size, Map<String, List<String>> svgPaths) {
-    final Map<String, VectorElement> elementMap = svgPaths.map((key, value) {
-      return MapEntry(
-          key,
-          VectorElement.fromSVG(
-              name: key, svgPaths: svgPaths[key], color: Colors.red));
-    });
-    return VectorGroup(id: id, size: size, elementMap: elementMap);
-  }
-
-  void scale(double scaleFactor) {
-    for (final VectorElement element in elementMap.values.toList()) {
-      element.scale(scaleFactor);
-    }
-    size = size * scaleFactor;
+  @override
+  void draw(Canvas canvas, Rect viewport) {
+    canvas.drawPath(path, Paint());
   }
 }
