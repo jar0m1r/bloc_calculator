@@ -14,7 +14,7 @@ class MockVectorRepository extends VectorRepository {
 
   @override
   Future<String> fetchVectorSheet(String name) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     if (name == 'alphabet') {
       return '''
 {

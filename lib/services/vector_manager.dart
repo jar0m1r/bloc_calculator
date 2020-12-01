@@ -49,3 +49,6 @@ class VectorManager {
 
 // usage
 // vectorManager.sheet('alphabet')['capital_t'];
+
+// (Sprite)Sheet needs naming of elements
+// Image can be drawn just knowing the size

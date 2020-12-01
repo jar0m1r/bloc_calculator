@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc_calculator/app/locator.dart';
 import 'package:bloc_calculator/blocs/simple_bloc_observer.dart';
+import 'package:bloc_calculator/blocs/vector_manager/vector_manager_bloc.dart';
 import 'package:bloc_calculator/calculator_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,19 +23,30 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Calculator App',
-        builder: ExtendedNavigator.builder<auto_route.Router>(
-          router: auto_route.Router(),
-          builder: (context, extendedNav) => Theme(
-            data: CalculatorTheme(
-              accent1: color1,
-              background1: color2,
-              isDark: true,
-            ).themeData,
-            child: extendedNav,
+    return BlocProvider<VectorManagerBloc>(
+      create: (_) => VectorManagerBloc()
+        ..add(
+          InitializeManager(
+            const [
+              'splash',
+              'alphabet',
+            ],
           ),
-        ));
+        ),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Calculator App',
+          builder: ExtendedNavigator.builder<auto_route.Router>(
+            router: auto_route.Router(),
+            builder: (context, extendedNav) => Theme(
+              data: CalculatorTheme(
+                accent1: color1,
+                background1: color2,
+                isDark: true,
+              ).themeData,
+              child: extendedNav,
+            ),
+          )),
+    );
   }
 }

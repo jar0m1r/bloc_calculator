@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 
 class VectorWidget extends StatelessWidget {
   final VectorElement element;
-  final Size size;
 
-  const VectorWidget({Key key, this.element, this.size}) : super(key: key);
+  const VectorWidget({Key key, this.element}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +22,7 @@ class VectorHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return VectorWidget(element: element);
+    return Hero(
+        tag: 'hero${element.name}', child: VectorWidget(element: element));
   }
 }

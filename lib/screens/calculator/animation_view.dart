@@ -1,5 +1,8 @@
+import 'package:bloc_calculator/blocs/vector_manager/vector_manager_bloc.dart';
+import 'package:bloc_calculator/utils/vector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AnimationView extends HookWidget {
   const AnimationView({Key key}) : super(key: key);
@@ -9,14 +12,20 @@ class AnimationView extends HookWidget {
     final animationController = useAnimationController(
       duration: const Duration(milliseconds: 300),
     )..forward();
+
+    final _vectorManager = context.watch<VectorManagerBloc>();
+    final state = _vectorManager.state;
+
     return LayoutBuilder(
       builder: (context, constraints) => Stack(
         children: [
-          Align(
-            child: CustomPaint(
-                size: constraints.biggest,
-                painter: IntroAnimationDelegate(animationController)),
-          )
+          if (state is ManagerReady)
+            Align(
+              child: VectorHero(
+                element: state.manager.sheetMap['alphabet'].elementMap['_6'],
+                // size: constraints.biggest / 2,
+              ),
+            ),
         ],
       ),
     );
