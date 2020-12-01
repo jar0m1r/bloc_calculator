@@ -1,5 +1,5 @@
 import 'package:bloc_calculator/blocs/calculation/calculation_bloc.dart';
-import 'package:bloc_calculator/blocs/vector_manager/vector_manager_bloc.dart';
+import 'package:bloc_calculator/blocs/vector_sheet/vector_sheet_bloc.dart';
 import 'package:bloc_calculator/screens/calculator/display_view.dart';
 import 'package:bloc_calculator/screens/calculator/numpad_view.dart';
 import 'package:flutter/material.dart';
@@ -13,26 +13,33 @@ class CalculatorScreen extends StatelessWidget {
         BlocProvider<CalculationBloc>(
           create: (context) => CalculationBloc(),
         ),
-        BlocProvider<VectorManagerBloc>(
-          create: (context) => VectorManagerBloc(),
+        BlocProvider<VectorSheetBloc>(
+          create: (context) =>
+              VectorSheetBloc()..add(InitializeSheet('alphabet')),
         ),
       ],
       child: Builder(
-        builder: (context) => Scaffold(
-          body: SafeArea(
-            child: SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(child: DisplayView()),
-                  NumpadView(),
-                ],
+        builder: (context) {
+          final sheetBloc =
+              BlocProvider.of<VectorSheetBloc>(context, listen: true);
+          return Scaffold(
+            body: SafeArea(
+              child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: (sheetBloc.state is SheetLoading)
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(child: DisplayView()),
+                          NumpadView(),
+                        ],
+                      ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

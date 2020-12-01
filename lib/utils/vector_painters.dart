@@ -16,8 +16,9 @@ class VectorPainter extends CustomPainter {
       ..color = Colors.white
       ..style = PaintingStyle.fill;
 
-    canvas.drawPath(element.paths[1], outerPaint);
-    canvas.drawPath(element.paths[0], innerPaint);
+    //TODO make this use Drawable draw (find solution for Paint())
+    canvas.drawPath(element.layers[0].path, outerPaint);
+    canvas.drawPath(element.layers[1].path, innerPaint);
   }
 
   @override

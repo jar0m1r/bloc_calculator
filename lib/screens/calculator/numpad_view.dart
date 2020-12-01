@@ -1,6 +1,4 @@
 import 'package:bloc_calculator/blocs/calculation/calculation_bloc.dart';
-import 'package:bloc_calculator/screens/splash_screen/splash_elements.dart';
-import 'package:bloc_calculator/utils/vector_group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,9 +48,6 @@ class NumpadView extends StatelessWidget {
     NumpadItem(ActionInputType.undo, '<'),
     NumpadItem(ActionInputType.clear, 'C'),
   ];
-
-  //make singleton service agnostic of UI
-  final VectorGroup group = splashScreenVectorImage;
 
   @override
   Widget build(BuildContext context) {

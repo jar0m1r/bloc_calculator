@@ -86,6 +86,36 @@ class CalculationBloc extends Bloc<CalculationEvent, CalculationState> {
   Stream<CalculationState> _mapActionToState(ActionInputType value) async* {
     if (value == ActionInputType.clear) {
       yield const CalculationFirstOperand(Calculation());
+    } else if (value == ActionInputType.undo) {
+      yield* _executeUndo(state);
+    }
+  }
+
+  Stream<CalculationState> _executeUndo(CalculationState state) async* {
+    if (state is CalculationFirstOperand) {
+      final calculation = state.calculation;
+      if (calculation.firstOperand != null && calculation.firstOperand > 9) {
+        final String oldValueString = '${calculation.firstOperand}';
+        final int newValue =
+            int.parse(oldValueString.substring(0, oldValueString.length - 1));
+        yield CalculationFirstOperand(
+            calculation.copyWith(firstOperand: newValue));
+      } else {
+        yield CalculationFirstOperand(calculation.copyWith(firstOperand: 0));
+      }
+    } else if (state is CalculationSecondOperand) {
+      final calculation = state.calculation;
+      if (calculation.secondOperand != null && calculation.secondOperand > 9) {
+        final String oldValueString = '${calculation.secondOperand}';
+        final int newValue =
+            int.parse(oldValueString.substring(0, oldValueString.length - 1));
+        yield CalculationSecondOperand(
+            calculation.copyWith(secondOperand: newValue));
+      } else {
+        yield CalculationSecondOperand(calculation.copyWith(secondOperand: 0));
+      }
+    } else {
+      return;
     }
   }
 

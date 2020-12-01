@@ -33,16 +33,16 @@ class VectorGroup {
   }
 }
 
-class VectorElement {
+class VectorElement implements Drawable {
   String name;
-  List<Path> paths;
+  List<VectorElementLayer> layers;
   Size size;
   Offset position;
   Color color;
 
   VectorElement._({
     this.name,
-    this.paths,
+    this.layers,
     this.size,
     this.position,
     this.color,
@@ -54,10 +54,15 @@ class VectorElement {
     final bounds = paths.getBounds();
     final position = Offset(bounds.left, bounds.top);
     final normalizedPaths = paths.map((path) => path.shift(-position)).toList();
+    final vectorElementLayers = normalizedPaths
+        .map((path) => VectorElementLayer(
+              path: path,
+            ))
+        .toList();
 
     return VectorElement._(
       name: name,
-      paths: normalizedPaths,
+      layers: vectorElementLayers,
       size: Size(bounds.width, bounds.height),
       position: position,
       color: color,
@@ -65,25 +70,26 @@ class VectorElement {
   }
 
   void scale(double scaleFactor) {
-    paths = paths.map((path) => path.scale(scaleFactor)).toList();
-    size = paths.getBounds().size;
+    layers = layers
+        .map((layer) => VectorElementLayer(path: layer.path.scale(scaleFactor)))
+        .toList();
+    size = layers.map((layer) => layer.path).toList().getBounds().size;
     position *= scaleFactor;
+  }
+
+  @override
+  void draw(Canvas canvas, Rect viewport) {
+    for (final layer in layers) {
+      layer.draw(canvas, viewport);
+    }
   }
 }
 
 class VectorElementLayer implements Drawable {
-  final String id;
   final Path path;
-  final Size size;
-  final Offset position;
-  final Color color;
 
-  VectorElementLayer._({
-    this.id,
+  VectorElementLayer({
     this.path,
-    this.size,
-    this.position,
-    this.color,
   });
 
   @override
